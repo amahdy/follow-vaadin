@@ -76,10 +76,10 @@
       }
 
       .card-main {
-        -webkit-transition: 1s ease-in-out;
-        -moz-transition: 1s ease-in-out;
-        -o-transition: 1s ease-in-out;
-        transition: 1s ease-in-out;
+        -webkit-transition: 0.3s ease-in-out;
+        -moz-transition: 0.3s ease-in-out;
+        -o-transition: 0.3s ease-in-out;
+        transition: 0.3s ease-in-out;
       }
 
       .card-close {
@@ -244,7 +244,18 @@
         if (this.loaded) {
             this.lastUpdated = new Date()
             this.feed = response.detail[0].responseData.feed;
-            this.authors = this.feed.entries.map(function(a) {return a.author;});
+
+            //this.authors=this.feed.entries.map(function(a) {return a.author;});
+            //Generate unique list of authors
+            var aAuths = Array();
+            for(var entry of this.feed.entries) {
+              var cAuth = entry.author;
+              if(aAuths.indexOf(cAuth) < 0) {
+                aAuths.push(cAuth);
+              }
+            }
+            //Don't push directly to an observed property
+            this.authors = aAuths;
         }
       },
 
