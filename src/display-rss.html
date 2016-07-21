@@ -10,6 +10,8 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/vaadin-icons/vaadin-icons.html">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
@@ -62,8 +64,13 @@
         @apply(--layout-flex);
       }
 
-      .card[expanded] .card-close {
+      .card[expanded] .card-close,
+      .card-snippet {
         display: block;
+      }
+
+      .card[expanded] .card-snippet {
+        display: none;
       }
 
       .card-close {
@@ -79,6 +86,13 @@
 
       .card[expanded] .container {
         background: #ddd;
+      }
+
+      /* fix paper-button link style */
+      .inherit {
+        color: inherit;
+        background-color: inherit;
+        text-decoration: none;
       }
     </style>
 
@@ -114,11 +128,11 @@
                 mini
                 icon="close"
                 title="Close"></paper-fab>
-              <h1><a href="{{item.link}}" target="_blank">{{item.title}}</a></h1>
+              <h1>{{item.title}}</h1>
               <small><b>{{item.author}}</b></small>
               |
               <small>{{item.publishedDate}}</small>
-              <p>{{item.contentSnippet}}</p>
+              <p class="card-snippet">{{item.contentSnippet}}</p>
             </div>
           </div>
           <iron-collapse opened="{{item.expanded}}">
@@ -126,8 +140,16 @@
             </div>
           </iron-collapse>
           <div class="card-actions">
-            <paper-button>Share</paper-button>
-            <paper-button>Website</paper-button>
+            <paper-button raised>
+              <iron-icon icon="vaadin-icons:share-square"></iron-icon>
+              &nbsp;Share
+            </paper-button>
+            <a href="{{item.link}}" target="_blank" class="inherit">
+              <paper-button raised>
+                <iron-icon icon="vaadin-icons:external-link"></iron-icon>
+                &nbsp;Website
+              </paper-button>
+            </a>
           </div>
         </div>
       </template>
