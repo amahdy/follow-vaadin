@@ -9,6 +9,7 @@
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
@@ -61,16 +62,12 @@
         @apply(--layout-flex);
       }
 
-      .card-contents, .card-close {
-        display: none;
-      }
-
-      .card[expanded] .card-contents,
       .card[expanded] .card-close {
         display: block;
       }
 
       .card-close {
+        display: none;
         --paper-fab-background: var(--paper-light-blue-500);
         --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
         float: right;
@@ -117,17 +114,17 @@
                 mini
                 icon="close"
                 title="Close"></paper-fab>
-              <h1><a href="{{item.link}}" target="_blank" class="entry_title">{{item.title}}</a></h1>
+              <h1><a href="{{item.link}}" target="_blank">{{item.title}}</a></h1>
               <small><b>{{item.author}}</b></small>
               |
               <small>{{item.publishedDate}}</small>
               <p>{{item.contentSnippet}}</p>
             </div>
           </div>
-          <div
-            class="card-contents"
-            inner-h-t-m-l="{{item.content}}">
-          </div>
+          <iron-collapse opened="{{item.expanded}}">
+            <div inner-h-t-m-l="{{item.content}}">
+            </div>
+          </iron-collapse>
           <div class="card-actions">
             <paper-button>Share</paper-button>
             <paper-button>Website</paper-button>
