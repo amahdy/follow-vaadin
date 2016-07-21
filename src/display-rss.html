@@ -15,6 +15,31 @@
       style if an ancestor has the different class
       :host(.different) { }
       */
+
+      .card {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        padding: 16px;
+        margin: 24px;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #757575;
+      }
+      .circle {
+        display: inline-block;
+        height: 64px;
+        width: 64px;
+        border-radius: 50%;
+        background: #ddd;
+        line-height: 64px;
+        font-size: 30px;
+        color: #555;
+        text-align: center;
+      }
+      h1 {
+        font-size: 22px;
+        margin: 16px 0;
+        color: #212121;
+      }
     </style>
 
     <iron-jsonp-library
@@ -28,11 +53,13 @@
         <small>Last updated: {{lastUpdated}}</small>
         <ul class="entries">
         <template is="dom-repeat" items="{{feed.entries}}">
-            <li>
-                <a href="{{item.link}}" target="_blank" class="entry_title">{{item.title}}</a>
-                <small class="entry_published">{{item.publishedDate}}</small>
-                <p>{{item.contentSnippet}}</p>
-            </li>
+          <div class="card">
+            <div class="circle">1</div>
+            <h1><a href="{{item.link}}" target="_blank" class="entry_title">{{item.title}}</a></h1>
+            <small class="entry_published">{{item.publishedDate}}</small>
+            <p>{{item.contentSnippet}}</p>
+            <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
+          </div>
         </template>
         </ul>
     </div>
