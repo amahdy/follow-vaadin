@@ -1,0 +1,28 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="display-rss.html">
+
+<dom-module id="fv-blog">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <display-rss url="https://vaadin.com/blog/-/blogs/rss" entries="20" refresh="10000"></display-rss>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'fv-blog'
+
+    });
+
+  </script>
+</dom-module>
