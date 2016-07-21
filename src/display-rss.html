@@ -49,6 +49,18 @@
         height: 150px;
         background: #ddd;
       }
+
+      .container > div {
+        padding: 15px;
+        min-height: 20px;
+      }
+
+      .flex-horizontal {
+        @apply(--layout-horizontal);
+      }
+      .flexchild {
+        @apply(--layout-flex);
+      }
     </style>
 
     <iron-jsonp-library
@@ -63,14 +75,20 @@
       <small>Last updated: {{lastUpdated}}</small>
       <template is="dom-repeat" items="{{feed.entries}}">
         <div class="card">
-          <iron-image class="circle"
-            sizing="cover"
-            id="thumbnail-cover"
-            alt="Feed Thumbnail"
-            src="{{loadImage(item.content)}}"></iron-image>
-          <h1><a href="{{item.link}}" target="_blank" class="entry_title">{{item.title}}</a></h1>
-          <small class="entry_published">{{item.publishedDate}}</small>
-          <p>{{item.contentSnippet}}</p>
+          <div class="container flex-horizontal">
+            <div>
+              <iron-image class="circle"
+                sizing="cover"
+                id="thumbnail-cover"
+                alt="Feed Thumbnail"
+                src="{{loadImage(item.content)}}"></iron-image>
+            </div>
+            <div class="flexchild">
+              <h1><a href="{{item.link}}" target="_blank" class="entry_title">{{item.title}}</a></h1>
+              <small class="entry_published">{{item.publishedDate}}</small>
+              <p>{{item.contentSnippet}}</p>
+            </div>
+          </div>
         </div>
       </template>
     </div>
