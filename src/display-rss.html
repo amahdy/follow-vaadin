@@ -57,7 +57,6 @@
           <h1><a href="{{item.link}}" target="_blank" class="entry_title">{{item.title}}</a></h1>
           <small class="entry_published">{{item.publishedDate}}</small>
           <p>{{item.contentSnippet}}</p>
-          <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
         </div>
       </template>
     </div>
@@ -65,20 +64,28 @@
   <script>
     Polymer({
       is: 'display-rss',
-      //applyAuthorStyles: true,
-      //resetStyleInheritance: true,
-      url: 'http://feeds.bbci.co.uk/news/england/rss.xml',
-      entries: 10,
-      refresh: 0,
-      lastUpdated: 'Not updated yet',
+
+      properties: {
+        //applyAuthorStyles: true,
+        //resetStyleInheritance: true,
+        url: String,
+        entries: Number,
+        refresh: Number,
+        lastUpdated: {
+          type: String,
+          value: 'Loading...'
+        }
+      },
 
       ready: function() {
-          var that = this;
-          if (this.refresh) {
-              setInterval(function(){
-                  that.$.feed_data.go();
-              }, this.refresh);
-          }
+        //TODO: re-invoke??
+        // var feeds = this.$.feed_data;
+        // window.f = feeds;
+        // if (this.refresh) {
+        //   setInterval(function(){
+        //       feeds.go();
+        //   }, this.refresh);
+        // }
       },
 
       listeners: {
