@@ -10,6 +10,7 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/vaadin-icons/vaadin-icons.html">
 <link rel="import" href="fv-icons.html">
 
 <dom-module id="fv-app">
@@ -22,6 +23,7 @@
         display: block;
         --app-primary-color: var(--paper-light-blue-500);
         --app-secondary-color: var(--paper-light-blue-700);
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
       }
 
       app-header {
@@ -40,17 +42,20 @@
         padding: 0 16px;
         line-height: 40px;
         text-decoration: none;
-        color: var(--app-secondary-color);
+        color: black;
       }
       .drawer-list a.iron-selected {
-        color: black;
+        color: var(--app-primary-color);
         font-weight: bold;
       }
       .drawer-list a.subroute {
         padding-left: 32px;
       }
 
-
+      .follow {
+        color: var(--app-secondary-color);
+        font-weight: bold;
+      }
     </style>
 
     <app-location route="{{route}}"></app-location>
@@ -64,8 +69,12 @@
 
       <!-- Drawer content -->
       <app-drawer>
-        <app-toolbar>Follow</app-toolbar>
-        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+        <app-toolbar class="follow">Follow</app-toolbar>
+        <iron-selector
+          selected="[[page]]"
+          attr-for-selected="name"
+          class="drawer-list"
+          role="navigation">
           <a name="blog" href="/blog">Blog</a>
           <a name="videos" href="/videos">Videos</a>
           <a name="forum" href="/forum">Forum</a>
@@ -75,10 +84,13 @@
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
 
-        <app-header condenses reveals effects="waterfall">
+        <app-header fixed condenses reveals effects="waterfall">
           <app-toolbar>
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-            <div title>Vaadin</div>
+            <paper-icon-button icon="vaadin-icons:menu" drawer-toggle></paper-icon-button>
+            <div title>
+              Vaadin
+              <iron-icon icon="vaadin-icons:vaadin-v"></iron-icon>
+            </div>
           </app-toolbar>
         </app-header>
 

@@ -23,7 +23,7 @@
       .card {
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
         padding: 16px;
-        margin: 24px;
+        margin: 7px;
         border-radius: 5px;
         background-color: #fff;
         color: #757575;
@@ -46,8 +46,8 @@
       }
 
       #thumbnail-cover {
-        width: 150px;
-        height: 150px;
+        width: 120px;
+        height: 120px;
         background: #ddd;
       }
 
@@ -103,6 +103,10 @@
         background-color: inherit;
         text-decoration: none;
       }
+
+      img {
+        max-width: 100%;
+      }
     </style>
 
     <iron-media-query query="(min-width: 800px)" query-matches="{{wide}}"></iron-media-query>
@@ -145,7 +149,7 @@
             </div>
           </div>
           <iron-collapse opened="{{item.expanded}}">
-            <div inner-h-t-m-l="{{item.content}}">
+            <div class="card-content" inner-h-t-m-l="{{item.content}}">
             </div>
           </iron-collapse>
           <div class="card-actions">
@@ -200,7 +204,6 @@
         if (this.loaded) {
             this.lastUpdated = new Date()
             this.feed = response.detail[0].responseData.feed;
-            window.f = this.feed;
         }
       },
 
