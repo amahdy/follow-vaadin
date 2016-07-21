@@ -75,9 +75,18 @@
 
       .card-close {
         display: none;
-        --paper-fab-background: var(--paper-light-blue-500);
-        --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
+        --paper-fab-background: var(--app-primary-color);
+        --paper-fab-keyboard-focus-background: var(--app-secondary-color);
         float: right;
+      }
+
+      paper-button.card-button {
+          background-color: var(--app-primary-color);
+          color: white;
+          --paper-button-raised-keyboard-focus: {
+            background-color: var(--app-secondary-color); !important;
+            color: white !important;
+          };
       }
 
       .card .container {
@@ -140,12 +149,12 @@
             </div>
           </iron-collapse>
           <div class="card-actions">
-            <paper-button raised>
+            <paper-button raised class="card-button">
               <iron-icon icon="vaadin-icons:share-square"></iron-icon>
               &nbsp;Share
             </paper-button>
             <a href="{{item.link}}" target="_blank" class="inherit">
-              <paper-button raised>
+              <paper-button raised class="card-button">
                 <iron-icon icon="vaadin-icons:external-link"></iron-icon>
                 &nbsp;Website
               </paper-button>
