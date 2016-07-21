@@ -7,18 +7,14 @@
 <link rel="import" href="../bower_components/iron-jsonp-library/iron-jsonp-library.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
 <dom-module id="display-rss">
   <template>
     <style>
-      /* styles for the custom element itself - lowest specificity */
       :host { display: block; }
-      /*
-      style if an ancestor has the different class
-      :host(.different) { }
-      */
 
       .card {
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
@@ -90,9 +86,15 @@
             </div>
             <div class="flexchild">
               <h1><a href="{{item.link}}" target="_blank" class="entry_title">{{item.title}}</a></h1>
-              <small class="entry_published">{{item.publishedDate}}</small>
+              <small><b>{{item.author}}</b></small>
+              |
+              <small>{{item.publishedDate}}</small>
               <p>{{item.contentSnippet}}</p>
             </div>
+          </div>
+          <div class="cardactions">
+            <paper-button>Share</paper-button>
+            <paper-button>Website</paper-button>
           </div>
         </div>
       </template>
