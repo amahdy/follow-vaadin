@@ -1,7 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="display-rss.html">
 
-<dom-module id="fv-blog">
+<dom-module id="fv-forum">
 
   <template>
 
@@ -12,7 +12,7 @@
       }
     </style>
 
-    <display-rss url="https://vaadin.com/blog/-/blogs/rss" entries="20" refresh="10000"></display-rss>
+    <display-rss url="https://twitrss.me/twitter_user_to_rss/?user=vaadin" entries="20" refresh="10000"></display-rss>
 
   </template>
 
@@ -20,7 +20,7 @@
 
     Polymer({
 
-      is: 'fv-blog'
+      is: 'fv-forum'
 
     });
 
