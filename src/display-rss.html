@@ -5,6 +5,9 @@
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-jsonp-library/iron-jsonp-library.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
 <dom-module id="display-rss">
   <template>
@@ -40,6 +43,12 @@
         margin: 16px 0;
         color: #212121;
       }
+
+      #thumbnail-cover {
+        width: 150px;
+        height: 150px;
+        background: #ddd;
+      }
     </style>
 
     <iron-jsonp-library
@@ -54,7 +63,11 @@
       <small>Last updated: {{lastUpdated}}</small>
       <template is="dom-repeat" items="{{feed.entries}}">
         <div class="card">
-          <div class="circle">1</div>
+          <iron-image class="circle"
+            sizing="cover"
+            id="thumbnail-cover"
+            alt="Feed Thumbnail"
+            src="{{loadImage(item.content)}}"></iron-image>
           <h1><a href="{{item.link}}" target="_blank" class="entry_title">{{item.title}}</a></h1>
           <small class="entry_published">{{item.publishedDate}}</small>
           <p>{{item.contentSnippet}}</p>
@@ -75,7 +88,8 @@
         lastUpdated: {
           type: String,
           value: 'Loading...'
-        }
+        },
+        feed: Object
       },
 
       ready: function() {
@@ -97,6 +111,16 @@
         if (this.loaded) {
             this.lastUpdated = new Date()
             this.feed = response.detail[0].responseData.feed;
+        }
+      },
+
+      loadImage: function(d) {
+        var imgSrc = $(d).find('img')[0];
+        if(imgSrc) {
+          return imgSrc.src;
+        }else {
+          //TODO baah
+          return "http://getuikit.com/docs/images/placeholder_600x400.svg"
         }
       }
     });
