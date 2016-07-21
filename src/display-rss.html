@@ -8,11 +8,15 @@
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/vaadin-icons/vaadin-icons.html">
 <link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="./paper-share-buttons/paper-share-facebook.html">
+<link rel="import" href="./paper-share-buttons/paper-share-twitter.html">
+<link rel="import" href="./paper-share-buttons/paper-share-google.html">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
@@ -113,6 +117,11 @@
         text-decoration: none;
       }
 
+      paper-icon-button.icon-small {
+        width: 25px;
+        height: 25px;
+      }
+
       img {
         max-width: 100%;
       }
@@ -183,15 +192,19 @@
             </div>
           </iron-collapse>
           <div class="card-actions">
-            <paper-button raised class="card-button">
+            <!-- <paper-button raised class="card-button">
               <iron-icon icon="vaadin-icons:share-square"></iron-icon>
               &nbsp;Share
-            </paper-button>
+            </paper-button> -->
+            <paper-share-facebook link={{item.link}}></paper-share-facebook>
+            <paper-share-twitter
+              link={{item.link}}
+              user="vaadin"
+              text="{{item.contentSnippet}}"></paper-share-twitter>
+            <paper-share-google link={{item.link}}></paper-share-google>
             <a href="{{item.link}}" target="_blank" class="inherit">
-              <paper-button raised class="card-button">
-                <iron-icon icon="vaadin-icons:external-link"></iron-icon>
-                &nbsp;Website
-              </paper-button>
+              <paper-icon-button icon="vaadin-icons:external-link" class="icon-small">
+              </paper-icon-button>
             </a>
           </div>
         </div>
