@@ -49,8 +49,9 @@
       library-loaded="{{loaded}}"></iron-jsonp-library>
 
     <div class="container">
-      <h1 class="feed_title">{{feed.title}}</h1>
-      <small>Last updated: {{lastUpdated}}</small>
+      <!-- doesn't make sense because no refresh is happeneing -->
+      <!-- <h1 class="feed_title">{{feed.title}}</h1> -->
+      <!-- <small>Last updated: {{lastUpdated}}</small> -->
       <template is="dom-repeat" items="{{feed.entries}}">
         <div class="card">
           <div class="circle">1</div>
