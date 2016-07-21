@@ -6,6 +6,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-jsonp-library/iron-jsonp-library.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
@@ -55,13 +56,16 @@
         min-height: 20px;
       }
 
-      .flex-horizontal {
+      .container[wide-layout] {
         @apply(--layout-horizontal);
       }
+
       .flexchild {
         @apply(--layout-flex);
       }
     </style>
+
+    <iron-media-query query="(min-width: 800px)" query-matches="{{wide}}"></iron-media-query>
 
     <iron-jsonp-library
       id="feed_data"
@@ -75,9 +79,10 @@
       <small>Last updated: {{lastUpdated}}</small>
       <template is="dom-repeat" items="{{feed.entries}}">
         <div class="card">
-          <div class="container flex-horizontal">
+          <div class="container" wide-layout$="{{wide}}">
             <div>
-              <iron-image class="circle"
+              <iron-image
+                class="circle"
                 sizing="cover"
                 id="thumbnail-cover"
                 alt="Feed Thumbnail"
