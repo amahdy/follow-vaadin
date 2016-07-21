@@ -49,19 +49,17 @@
       library-loaded="{{loaded}}"></iron-jsonp-library>
 
     <div class="container">
-        <h1 class="feed_title">{{feed.title}}</h1>
-        <small>Last updated: {{lastUpdated}}</small>
-        <ul class="entries">
-        <template is="dom-repeat" items="{{feed.entries}}">
-          <div class="card">
-            <div class="circle">1</div>
-            <h1><a href="{{item.link}}" target="_blank" class="entry_title">{{item.title}}</a></h1>
-            <small class="entry_published">{{item.publishedDate}}</small>
-            <p>{{item.contentSnippet}}</p>
-            <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
-          </div>
-        </template>
-        </ul>
+      <h1 class="feed_title">{{feed.title}}</h1>
+      <small>Last updated: {{lastUpdated}}</small>
+      <template is="dom-repeat" items="{{feed.entries}}">
+        <div class="card">
+          <div class="circle">1</div>
+          <h1><a href="{{item.link}}" target="_blank" class="entry_title">{{item.title}}</a></h1>
+          <small class="entry_published">{{item.publishedDate}}</small>
+          <p>{{item.contentSnippet}}</p>
+          <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
+        </div>
+      </template>
     </div>
   </template>
   <script>
