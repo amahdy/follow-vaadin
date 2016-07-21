@@ -12,6 +12,7 @@
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/vaadin-icons/vaadin-icons.html">
+<link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
@@ -22,7 +23,7 @@
 
       .card {
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        padding: 16px;
+        /*padding: 16px;*/
         margin: 7px;
         border-radius: 5px;
         background-color: #fff;
@@ -69,8 +70,16 @@
         display: block;
       }
 
-      .card[expanded] .card-snippet {
+      .card[expanded] .card-snippet,
+      .card[expanded] .card-thumbnail {
         display: none;
+      }
+
+      .card-main {
+        -webkit-transition: 1s ease-in-out;
+        -moz-transition: 1s ease-in-out;
+        -o-transition: 1s ease-in-out;
+        transition: 1s ease-in-out;
       }
 
       .card-close {
@@ -107,6 +116,18 @@
       img {
         max-width: 100%;
       }
+
+      pre {
+          white-space: pre-wrap;       /* Since CSS 2.1 */
+          white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+          white-space: -pre-wrap;      /* Opera 4-6 */
+          white-space: -o-pre-wrap;    /* Opera 7 */
+          word-wrap: break-word;       /* Internet Explorer 5.5+ */
+      }
+
+      vaadin-combo-box {
+        padding: 7px;
+      }
     </style>
 
     <iron-media-query query="(min-width: 800px)" query-matches="{{wide}}"></iron-media-query>
@@ -121,13 +142,22 @@
       <!-- doesn't make sense because no refresh is happeneing -->
       <!-- <h1 class="feed_title">{{feed.title}}</h1> -->
       <small>Last updated: {{lastUpdated}}</small>
-      <template is="dom-repeat" items="{{feed.entries}}">
+      <vaadin-combo-box
+        id="cbFilter"
+        label="Author"
+        class="filter"
+        items="[[authors]]"></vaadin-combo-box>
+      <template
+        id="rssCards"
+        is="dom-repeat"
+        items="{{feed.entries}}"
+        filter="authorFilter">
         <div class="card" expanded$="{{item.expanded}}">
           <div
             on-tap="toggleCard"
-            class="container"
+            class="container card-main"
             wide-layout$="{{wide}}">
-            <div>
+            <div class="card-thumbnail">
               <iron-image
                 class="circle"
                 sizing="cover"
@@ -182,18 +212,28 @@
           type: String,
           value: 'Loading...'
         },
-        feed: Object
+        feed: Object,
+        authors: Array,
+        filterAuthor: String
       },
 
       ready: function() {
+        var that = this;
+
         //TODO: re-invoke??
         // var feeds = this.$.feed_data;
-        // window.f = feeds;
         // if (this.refresh) {
         //   setInterval(function(){
         //       feeds.go();
         //   }, this.refresh);
         // }
+
+        var cb = this.$.cbFilter;
+
+        cb.addEventListener('value-changed', function() {
+          that.filterAuthor = cb.selectedItem;
+          that.$.rssCards.render();
+        });
       },
 
       listeners: {
@@ -204,6 +244,7 @@
         if (this.loaded) {
             this.lastUpdated = new Date()
             this.feed = response.detail[0].responseData.feed;
+            this.authors = this.feed.entries.map(function(a) {return a.author;});
         }
       },
 
@@ -220,6 +261,11 @@
       toggleCard: function(e) {
         var state = e.model;
         state.set("item.expanded", !state.item.expanded);
+      },
+
+      authorFilter: function(item) {
+        return this.filterAuthor == null || this.filterAuthor == 'undefined' ?
+                true : item.author == this.filterAuthor;
       }
     });
   </script>
