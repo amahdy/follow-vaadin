@@ -33,7 +33,8 @@
         background-color: #fff;
         color: #757575;
       }
-      .circle {
+
+      .container[wide-layout] .circle {
         display: inline-block;
         height: 64px;
         width: 64px;
@@ -44,6 +45,11 @@
         color: #555;
         text-align: center;
       }
+      .circle {
+        height: auto;
+        width: auto;
+      }
+
       h1 {
         font-size: 22px;
         margin: 16px 0;
@@ -51,8 +57,13 @@
       }
 
       #thumbnail-cover {
-        width: 120px;
+        width: 100%;
         height: 120px;
+      }
+
+      .container[wide-layout] #thumbnail-cover {
+        width: 150px;
+        height: 150px;
         background: #ddd;
       }
 
