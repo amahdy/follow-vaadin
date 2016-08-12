@@ -34,7 +34,12 @@
         --paper-icon-button-ink-color: white;
       }
 
+      .nav-items {
+        @apply(--layout-flex);
+      }
+
       .drawer-list {
+        @apply(--layout-vertical);
         margin: 0 20px;
       }
       .drawer-list a {
@@ -80,6 +85,13 @@
           <a name="tweets" href="/tweets">Tweets</a>
           <a name="roadmap" href="/roadmap">Roadmap</a>
           <a name="releases" href="/releases">Releases</a>
+          <div>
+            <hr />
+            <a name="github" href="https://github.com/amahdy/follow-vaadin">
+              <img height="25px" style="vertical-align:middle" src="../images/github.png" />
+              Fork me on GitHub
+            </a>
+          </div>
         </iron-selector>
       </app-drawer>
 
