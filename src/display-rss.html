@@ -9,7 +9,6 @@
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
@@ -127,11 +126,6 @@
         text-decoration: none;
       }
 
-      paper-icon-button.icon-small {
-        width: 25px;
-        height: 25px;
-      }
-
       img {
         max-width: 100%;
       }
@@ -146,6 +140,11 @@
 
       vaadin-combo-box {
         padding: 7px;
+      }
+
+      iron-icon {
+        width: 15px;
+        height: 15px;
       }
     </style>
 
@@ -213,8 +212,9 @@
               text="{{item.contentSnippet}}"></paper-share-twitter>
             <paper-share-google link={{item.link}}></paper-share-google>
             <a href="{{item.link}}" target="_blank" class="inherit">
-              <paper-icon-button icon="vaadin-icons:external-link" class="icon-small">
-              </paper-icon-button>
+              <paper-button>
+                <iron-icon icon="vaadin-icons:external-link"></iron-icon>
+              </paper-button>
             </a>
           </div>
         </div>

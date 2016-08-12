@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 
 <dom-module id="paper-share-twitter">
   <style>
@@ -11,6 +12,11 @@
       background: #24A9F2;
       color: white;
     }
+
+    iron-icon {
+      width: 15px;
+      height: 15px;
+    }
   </style>
 
   <template>
@@ -19,7 +25,7 @@
       on-click="navigate"
       raised$={{raised}}
       noink$={{noink}}>
-      Twitter
+      <iron-icon icon="vaadin-icons:twitter"></iron-icon>
     </paper-button>
   </template>
 </dom-module>
