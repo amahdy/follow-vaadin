@@ -34,7 +34,12 @@
         --paper-icon-button-ink-color: white;
       }
 
+      .nav-items {
+        @apply(--layout-flex);
+      }
+
       .drawer-list {
+        @apply(--layout-vertical);
         margin: 0 20px;
       }
       .drawer-list a {
@@ -68,7 +73,7 @@
     <app-drawer-layout fullbleed>
 
       <!-- Drawer content -->
-      <app-drawer>
+      <app-drawer swipe-open>
         <app-toolbar class="follow">Follow</app-toolbar>
         <iron-selector
           selected="[[page]]"
@@ -78,6 +83,15 @@
           <a name="articles" href="/follow-vaadin/articles">Articles</a>
           <a name="videos" href="/follow-vaadin/videos">Videos</a>
           <a name="tweets" href="/follow-vaadin/tweets">Tweets</a>
+          <a name="roadmap" href="/follow-vaadin/roadmap">Roadmap</a>
+          <a name="releases" href="/follow-vaadin/releases">Releases</a>
+          <div>
+            <hr />
+            <a name="github" href="https://github.com/amahdy/follow-vaadin">
+              <img height="25px" style="vertical-align:middle" src="../images/github.png" />
+              Fork me on GitHub
+            </a>
+          </div>
         </iron-selector>
       </app-drawer>
 
@@ -98,6 +112,8 @@
           <fv-articles name="articles"></fv-articles>
           <fv-videos name="videos"></fv-videos>
           <fv-tweets name="tweets"></fv-tweets>
+          <fv-roadmap name="roadmap"></fv-roadmap>
+          <fv-releases name="releases"></fv-releases>
         </iron-pages>
 
       </app-header-layout>
