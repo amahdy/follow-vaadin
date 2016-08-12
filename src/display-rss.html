@@ -254,7 +254,13 @@
         var cb = this.$.cbFilter;
 
         cb.addEventListener('value-changed', function() {
-          that.filterAuthor = cb.selectedItem;
+          if(that.filterAuthor == cb.selectedItem) {
+            // blah!
+            // combo box item reset
+            that.filterAuthor = null;
+          }else {
+            that.filterAuthor = cb.selectedItem;
+          }
           that.$.rssCards.render();
         });
       },
