@@ -2,8 +2,8 @@
   "entrypoint": "index.html",
   "shell": "src/fv-app.html",
   "fragments": [
-    "src/fv-blog.html",
+    "src/fv-articles.html",
     "src/fv-videos.html",
-    "src/fv-forum.html"
+    "src/fv-tweets.html"
   ]
 }
