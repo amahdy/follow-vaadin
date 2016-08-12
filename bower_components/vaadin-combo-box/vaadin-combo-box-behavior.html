@@ -7,6 +7,7 @@
   vaadin.elements = vaadin.elements || {};
   vaadin.elements.combobox = vaadin.elements.combobox || {};
 
+  /** @polymerBehavior vaadin.elements.combobox.ComboBoxBehavior */
   vaadin.elements.combobox.ComboBoxBehaviorImpl = {
     properties: {
       /**
@@ -100,10 +101,13 @@
         value: 'value'
       },
 
-      // Keep the inputElement public, as vaadin-combo-box is extended with
-      // PaperInputBehavior, which already has "inputElement" defined and we
-      // don't want to have two separate properties.
-      inputElement: Object,
+      /**
+       * Returns a reference to the input element.
+       */
+      inputElement: {
+        type: HTMLElement,
+        readOnly: true
+      },
       _toggleElement: Object,
       _clearElement: Object,
 
@@ -141,9 +145,6 @@
     },
 
     _onOverlayDown: function(event) {
-      // Prevent the focus transfer when user scrolls inside the overlay with mouse drag
-      event.preventDefault();
-
       if (this.$.overlay.touchDevice && event.target !== this.$.overlay.$.scroller) {
         // On touch devices, blur the input on touch start inside the overlay, in order to hide
         // the virtual keyboard. But don't close the overlay on this blur.
@@ -416,6 +417,7 @@
         this.$.overlay.$.selector.clearSelection();
       }
 
+      this.fire('change', undefined, {bubbles: true});
       this.close();
     },
 
@@ -498,6 +500,10 @@
 
     _preventDefault: function(e) {
       e.preventDefault();
+    },
+
+    _stopPropagation: function(e) {
+      e.stopPropagation();
     }
   };
 
@@ -528,5 +534,11 @@
    * Fired when the user sets a custom value.
    * @event custom-value-set
    * @param {String} detail the custom value
+   */
+
+  /**
+   * Fired when value changes.
+   * To comply with http://www.w3schools.com/jsref/event_onchange.asp
+   * @event change
    */
 </script>
