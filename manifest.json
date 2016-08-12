@@ -42,7 +42,7 @@
       "sizes": "512x512",
       "type": "image/png"
     }],
-  "start_url": "/",
+  "start_url": "/follow-vaadin/",
   "display": "standalone",
   "background_color": "#fff",
   "theme_color": "#03a9f4"
