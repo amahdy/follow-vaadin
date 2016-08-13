@@ -30,6 +30,8 @@
         border-radius: 5px;
         background-color: #fff;
         color: #757575;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
 
       .container[wide-layout] .circle {
@@ -293,7 +295,11 @@
       },
 
       loadImage: function(d) {
-        var imgSrc = $(d).find('img')[0];
+        var imgSrc = $(d).filter('img')[0];
+        if(!imgSrc) {
+          // don't ask
+          imgSrc = $(d).find('img')[0];
+        }
         if(imgSrc) {
           return imgSrc.src;
         }else {
