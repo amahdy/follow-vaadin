@@ -4,6 +4,8 @@
   "fragments": [
     "src/fv-articles.html",
     "src/fv-videos.html",
-    "src/fv-tweets.html"
+    "src/fv-tweets.html",
+    "src/fv-roadmap.html",
+    "src/fv-releases.html"
   ]
 }
