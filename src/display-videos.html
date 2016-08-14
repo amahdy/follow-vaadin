@@ -159,8 +159,16 @@
     <!-- library-url="http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num={{entries}}&q={{url}}&callback=%%callback%%" -->
 
     <iron-jsonp-library
+      id="playlist_data"
+      library-url=
+        "https://www.googleapis.com/youtube/v3/playlists?key=AIzaSyCgfLe7bb8oKK_Wc9uQH4P5SmS3c5vBktU&channelId=UCsGakFIbOsj-fgPFLf1QlQA&part=snippet,id&order=date&maxResults=50&callback=%%callback%%"
+      notify-event="plist-load"
+      library-loaded="{{ploaded}}"></iron-jsonp-library>
+
+    <iron-jsonp-library
       id="feed_data"
-      library-url="https://www.googleapis.com/youtube/v3/search?key=AIzaSyCgfLe7bb8oKK_Wc9uQH4P5SmS3c5vBktU&channelId=UCsGakFIbOsj-fgPFLf1QlQA&part=snippet,id&order=date&maxResults=25&callback=%%callback%%"
+      library-url=
+        "https://www.googleapis.com/youtube/v3/search?key=AIzaSyCgfLe7bb8oKK_Wc9uQH4P5SmS3c5vBktU&channelId=UCsGakFIbOsj-fgPFLf1QlQA&part=snippet,id&order=date&maxResults=10&callback=%%callback%%"
       notify-event="api-load"
       library-loaded="{{loaded}}"></iron-jsonp-library>
 
@@ -170,7 +178,7 @@
       <small>Last updated: {{lastUpdated}}</small>
       <vaadin-combo-box
         id="cbFilter"
-        label="Author"
+        label="Playlist"
         class="filter"
         items="[[authors]]"></vaadin-combo-box>
       <template
@@ -208,7 +216,7 @@
             <div class="card-content">
               <google-youtube
                 video-id="{{item.id.videoId}}"
-                height="450px"
+                height="350px"
                 width="100%">
               </google-youtube>
             </div>
@@ -245,6 +253,7 @@
           value: 'Loading...'
         },
         feed: Object,
+        plist: Object,
         authors: Array,
         filterAuthor: String
       },
@@ -275,7 +284,8 @@
       },
 
       listeners: {
-        'api-load': 'responseHandler'
+        'api-load': 'responseHandler',
+        'plist-load': 'responsePlistHandler'
       },
 
       responseHandler: function(response) {
@@ -286,18 +296,25 @@
             if(response.detail[0]) {
               this.feed = response.detail[0].items;
             }
+        }
+      },
 
-            //this.authors=this.feed.entries.map(function(a) {return a.author;});
-            //Generate unique list of authors
-            // var aAuths = Array();
-            // for(var entry of this.feed.entries) {
-            //   var cAuth = entry.author;
-            //   if(aAuths.indexOf(cAuth) < 0) {
-            //     aAuths.push(cAuth);
-            //   }
-            // }
-            // //Don't push directly to an observed property
-            // this.authors = aAuths;
+      responsePlistHandler: function(response) {
+        if(this.ploaded) {
+          //TODO: why this is called more than once?
+          if(response.detail[0]) {
+            this.plist = response.detail[0].items;
+          }
+
+          var aAuths = Array();
+          for(var entry of this.plist) {
+            var cAuth = entry.snippet.title;
+            if(aAuths.indexOf(cAuth) < 0) {
+              aAuths.push(cAuth);
+            }
+          }
+          //Don't push directly to an observed property
+          this.authors = aAuths;
         }
       },
 
