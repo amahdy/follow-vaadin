@@ -281,7 +281,11 @@
       responseHandler: function(response) {
         if (this.loaded) {
             this.lastUpdated = new Date();
-            this.feed = response.detail[0].items;
+
+            //TODO: why this is called more than once?
+            if(response.detail[0]) {
+              this.feed = response.detail[0].items;
+            }
 
             //this.authors=this.feed.entries.map(function(a) {return a.author;});
             //Generate unique list of authors
