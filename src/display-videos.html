@@ -1,6 +1,5 @@
 <!--
-  This code is taken and modified from a public repo.
-  PR suggested here: https://github.com/beldar/display-rss/pull/1
+  TODO: Removed duplicate with display-rss
 -->
 
 <link rel="import" href="../bower_components/jquery-import/jquery-import.html">
@@ -14,11 +13,12 @@
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/vaadin-icons/vaadin-icons.html">
 <link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../bower_components/google-youtube/google-youtube.html">
 <link rel="import" href="./paper-share-buttons/paper-share-facebook.html">
 <link rel="import" href="./paper-share-buttons/paper-share-twitter.html">
 <link rel="import" href="./paper-share-buttons/paper-share-google.html">
 
-<dom-module id="display-rss">
+<dom-module id="display-videos">
   <template>
     <style>
       :host { display: block; }
@@ -156,9 +156,11 @@
 
     <iron-media-query query="(min-width: 800px)" query-matches="{{wide}}"></iron-media-query>
 
+    <!-- library-url="http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num={{entries}}&q={{url}}&callback=%%callback%%" -->
+
     <iron-jsonp-library
       id="feed_data"
-      library-url="https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num={{entries}}&q={{url}}&callback=%%callback%%"
+      library-url="https://www.googleapis.com/youtube/v3/search?key=AIzaSyCgfLe7bb8oKK_Wc9uQH4P5SmS3c5vBktU&channelId=UCsGakFIbOsj-fgPFLf1QlQA&part=snippet,id&order=date&maxResults=25&callback=%%callback%%"
       notify-event="api-load"
       library-loaded="{{loaded}}"></iron-jsonp-library>
 
@@ -174,7 +176,7 @@
       <template
         id="rssCards"
         is="dom-repeat"
-        items="{{feed.entries}}"
+        items="{{feed}}"
         filter="authorFilter">
         <div class="card" expanded$="{{item.expanded}}">
           <div
@@ -187,7 +189,7 @@
                 sizing="cover"
                 id="thumbnail-cover"
                 alt="Feed Thumbnail"
-                src="{{loadImage(item.content)}}"></iron-image>
+                src="{{item.snippet.thumbnails.high.url}}"></iron-image>
             </div>
             <div class="flexchild">
               <paper-fab
@@ -195,25 +197,30 @@
                 mini
                 icon="close"
                 title="Close"></paper-fab>
-              <h1>{{item.title}}</h1>
-              <small><b>{{item.author}}</b></small>
-              |
-              <small>{{item.publishedDate}}</small>
-              <p class="card-snippet">{{item.contentSnippet}} [more]</p>
+              <h1>{{item.snippet.title}}</h1>
+              <!-- <small><b>{{item.author}}</b></small>
+              | -->
+              <small>{{item.snippet.publishedAt}}</small>
+              <p class="card-snippet">{{item.snippet.description}} [more]</p>
             </div>
           </div>
           <iron-collapse opened="{{item.expanded}}">
-            <div class="card-content" inner-h-t-m-l="{{item.content}}">
+            <div class="card-content">
+              <google-youtube
+                video-id="{{item.id.videoId}}"
+                height="450px"
+                width="100%">
+              </google-youtube>
             </div>
           </iron-collapse>
           <div class="card-actions">
-            <paper-share-facebook link={{item.link}}></paper-share-facebook>
+            <paper-share-facebook link={{loadLink(item.id.videoId)}}></paper-share-facebook>
             <paper-share-twitter
-              link={{item.link}}
+              link={{loadLink(item.id.videoId)}}
               user="vaadin"
-              text="{{item.contentSnippet}}"></paper-share-twitter>
-            <paper-share-google link={{item.link}}></paper-share-google>
-            <a href="{{item.link}}" target="_blank" class="inherit">
+              text="{{item.snippet.description}}"></paper-share-twitter>
+            <paper-share-google link={{loadLink(item.id.videoId)}}></paper-share-google>
+            <a href="{{loadLink(item.id.videoId)}}" target="_blank" class="inherit">
               <paper-button>
                 <iron-icon icon="vaadin-icons:external-link"></iron-icon>
               </paper-button>
@@ -225,7 +232,7 @@
   </template>
   <script>
     Polymer({
-      is: 'display-rss',
+      is: 'display-videos',
 
       properties: {
         //applyAuthorStyles: true,
@@ -273,35 +280,29 @@
 
       responseHandler: function(response) {
         if (this.loaded) {
-            this.lastUpdated = new Date()
-            this.feed = response.detail[0].responseData.feed;
+            this.lastUpdated = new Date();
+
+            //TODO: why this is called more than once?
+            if(response.detail[0]) {
+              this.feed = response.detail[0].items;
+            }
 
             //this.authors=this.feed.entries.map(function(a) {return a.author;});
             //Generate unique list of authors
-            var aAuths = Array();
-            for(var entry of this.feed.entries) {
-              var cAuth = entry.author;
-              if(aAuths.indexOf(cAuth) < 0) {
-                aAuths.push(cAuth);
-              }
-            }
-            //Don't push directly to an observed property
-            this.authors = aAuths;
+            // var aAuths = Array();
+            // for(var entry of this.feed.entries) {
+            //   var cAuth = entry.author;
+            //   if(aAuths.indexOf(cAuth) < 0) {
+            //     aAuths.push(cAuth);
+            //   }
+            // }
+            // //Don't push directly to an observed property
+            // this.authors = aAuths;
         }
       },
 
-      loadImage: function(d) {
-        var imgSrc = $(d).filter('img')[0];
-        if(!imgSrc) {
-          // don't ask
-          imgSrc = $(d).find('img')[0];
-        }
-        if(imgSrc) {
-          return imgSrc.src;
-        }else {
-          //TODO baah
-          return "images/placeholder_600x400.svg"
-        }
+      loadLink: function(d) {
+        return "https://youtu.be/" + d;
       },
 
       toggleCard: function(e) {

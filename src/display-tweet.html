@@ -1,6 +1,5 @@
 <!--
-  This code is taken and modified from a public repo.
-  PR suggested here: https://github.com/beldar/display-rss/pull/1
+  TODO: Removed duplicate with display-rss
 -->
 
 <link rel="import" href="../bower_components/jquery-import/jquery-import.html">
@@ -18,7 +17,7 @@
 <link rel="import" href="./paper-share-buttons/paper-share-twitter.html">
 <link rel="import" href="./paper-share-buttons/paper-share-google.html">
 
-<dom-module id="display-rss">
+<dom-module id="display-tweet">
   <template>
     <style>
       :host { display: block; }
@@ -113,10 +112,6 @@
           };
       }
 
-      .card .container {
-        cursor: pointer;
-      }
-
       .card[expanded] .container {
         background: #ddd;
       }
@@ -158,7 +153,7 @@
 
     <iron-jsonp-library
       id="feed_data"
-      library-url="https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num={{entries}}&q={{url}}&callback=%%callback%%"
+      library-url="http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num={{entries}}&q={{url}}&callback=%%callback%%"
       notify-event="api-load"
       library-loaded="{{loaded}}"></iron-jsonp-library>
 
@@ -178,7 +173,6 @@
         filter="authorFilter">
         <div class="card" expanded$="{{item.expanded}}">
           <div
-            on-tap="toggleCard"
             class="container card-main"
             wide-layout$="{{wide}}">
             <div class="card-thumbnail">
@@ -190,22 +184,12 @@
                 src="{{loadImage(item.content)}}"></iron-image>
             </div>
             <div class="flexchild">
-              <paper-fab
-                class="card-close"
-                mini
-                icon="close"
-                title="Close"></paper-fab>
-              <h1>{{item.title}}</h1>
               <small><b>{{item.author}}</b></small>
               |
               <small>{{item.publishedDate}}</small>
-              <p class="card-snippet">{{item.contentSnippet}} [more]</p>
+              <p class="card-snippet" inner-h-t-m-l="{{loadContent(item.content)}}"></p>
             </div>
           </div>
-          <iron-collapse opened="{{item.expanded}}">
-            <div class="card-content" inner-h-t-m-l="{{item.content}}">
-            </div>
-          </iron-collapse>
           <div class="card-actions">
             <paper-share-facebook link={{item.link}}></paper-share-facebook>
             <paper-share-twitter
@@ -225,7 +209,7 @@
   </template>
   <script>
     Polymer({
-      is: 'display-rss',
+      is: 'display-tweet',
 
       properties: {
         //applyAuthorStyles: true,
@@ -301,6 +285,19 @@
         }else {
           //TODO baah
           return "images/placeholder_600x400.svg"
+        }
+      },
+
+      loadContent: function(d) {
+        var imgSrc = $(d).filter('img')[0];
+        if(!imgSrc) {
+          // don't ask
+          imgSrc = $(d).find('img')[0];
+        }
+        if(imgSrc) {
+          return d.replace(imgSrc.outerHTML, "");
+        }else {
+          return d;
         }
       },
 

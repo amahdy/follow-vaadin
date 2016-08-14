@@ -26,6 +26,32 @@
         -webkit-tap-highlight-color: rgba(0,0,0,0);
       }
 
+      #pages /deep/ a:focus,
+      #pages /deep/ a:active,
+      #pages /deep/ a:hover {
+          color: #ff3a49;
+          text-decoration: none;
+          transition: 50ms;
+      }
+      #pages /deep/ a:hover,
+      #pages /deep/ a:focus {
+          color: #23527c;
+      }
+      #pages /deep/ a:active,
+      #pages /deep/ a:hover {
+          outline: 0;
+      }
+      #pages /deep/ a {
+          color: #00b4f0;
+          text-decoration: none;
+          border-bottom-width: 1px;
+          border-bottom-style: solid;
+          border-bottom-color: transparent;
+          outline: 0;
+          transition: 50ms;
+          background-color: transparent;
+      }
+
       app-header {
         background-color: var(--app-primary-color);
         color: #fff;
@@ -108,7 +134,7 @@
           </app-toolbar>
         </app-header>
 
-        <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
+        <iron-pages role="main" selected="[[page]]" attr-for-selected="name" id="pages">
           <fv-articles name="articles"></fv-articles>
           <fv-videos name="videos"></fv-videos>
           <fv-tweets name="tweets"></fv-tweets>
