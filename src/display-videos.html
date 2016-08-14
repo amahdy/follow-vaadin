@@ -1,0 +1,315 @@
+<!--
+  TODO: Removed duplicate with display-rss
+-->
+
+<link rel="import" href="../bower_components/jquery-import/jquery-import.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-jsonp-library/iron-jsonp-library.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/vaadin-icons/vaadin-icons.html">
+<link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../bower_components/google-youtube/google-youtube.html">
+<link rel="import" href="./paper-share-buttons/paper-share-facebook.html">
+<link rel="import" href="./paper-share-buttons/paper-share-twitter.html">
+<link rel="import" href="./paper-share-buttons/paper-share-google.html">
+
+<dom-module id="display-videos">
+  <template>
+    <style>
+      :host { display: block; }
+
+      .card {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        /*padding: 16px;*/
+        margin: 7px;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #757575;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .container[wide-layout] .circle {
+        display: inline-block;
+        height: 64px;
+        width: 64px;
+        border-radius: 50%;
+        background: #ddd;
+        line-height: 64px;
+        font-size: 30px;
+        color: #555;
+        text-align: center;
+      }
+      .circle {
+        height: auto;
+        width: auto;
+      }
+
+      h1 {
+        font-size: 22px;
+        margin: 16px 0;
+        color: #212121;
+      }
+
+      #thumbnail-cover {
+        width: 100%;
+        height: 120px;
+      }
+
+      .container[wide-layout] #thumbnail-cover {
+        width: 150px;
+        height: 150px;
+        background: #ddd;
+      }
+
+      .container > div {
+        padding: 15px;
+        min-height: 20px;
+      }
+
+      .container[wide-layout] {
+        @apply(--layout-horizontal);
+      }
+
+      .flexchild {
+        @apply(--layout-flex);
+      }
+
+      .card[expanded] .card-close,
+      .card-snippet {
+        display: block;
+      }
+
+      .card[expanded] .card-snippet,
+      .card[expanded] .card-thumbnail {
+        display: none;
+      }
+
+      .card-main {
+        -webkit-transition: 0.3s ease-in-out;
+        -moz-transition: 0.3s ease-in-out;
+        -o-transition: 0.3s ease-in-out;
+        transition: 0.3s ease-in-out;
+      }
+
+      .card-close {
+        display: none;
+        --paper-fab-background: var(--app-primary-color);
+        --paper-fab-keyboard-focus-background: var(--app-secondary-color);
+        float: right;
+      }
+
+      paper-button.card-button {
+          background-color: var(--app-primary-color);
+          color: white;
+          --paper-button-raised-keyboard-focus: {
+            background-color: var(--app-secondary-color); !important;
+            color: white !important;
+          };
+      }
+
+      .card .container {
+        cursor: pointer;
+      }
+
+      .card[expanded] .container {
+        background: #ddd;
+      }
+
+      /* fix paper-button link style */
+      .inherit {
+        color: inherit;
+        background-color: inherit;
+        text-decoration: none;
+      }
+
+      img {
+        max-width: 100%;
+      }
+
+      pre {
+          white-space: pre-wrap;       /* Since CSS 2.1 */
+          white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+          white-space: -pre-wrap;      /* Opera 4-6 */
+          white-space: -o-pre-wrap;    /* Opera 7 */
+          word-wrap: break-word;       /* Internet Explorer 5.5+ */
+      }
+
+      vaadin-combo-box {
+        padding: 7px;
+      }
+
+      iron-icon {
+        width: 15px;
+        height: 15px;
+      }
+
+      paper-button {
+        min-width: 50px;
+      }
+    </style>
+
+    <iron-media-query query="(min-width: 800px)" query-matches="{{wide}}"></iron-media-query>
+
+    <!-- library-url="http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num={{entries}}&q={{url}}&callback=%%callback%%" -->
+
+    <iron-jsonp-library
+      id="feed_data"
+      library-url="https://www.googleapis.com/youtube/v3/search?key=AIzaSyCgfLe7bb8oKK_Wc9uQH4P5SmS3c5vBktU&channelId=UCsGakFIbOsj-fgPFLf1QlQA&part=snippet,id&order=date&maxResults=25&callback=%%callback%%"
+      notify-event="api-load"
+      library-loaded="{{loaded}}"></iron-jsonp-library>
+
+    <div class="container">
+      <!-- doesn't make sense because no refresh is happeneing -->
+      <!-- <h1 class="feed_title">{{feed.title}}</h1> -->
+      <small>Last updated: {{lastUpdated}}</small>
+      <vaadin-combo-box
+        id="cbFilter"
+        label="Author"
+        class="filter"
+        items="[[authors]]"></vaadin-combo-box>
+      <template
+        id="rssCards"
+        is="dom-repeat"
+        items="{{feed}}"
+        filter="authorFilter">
+        <div class="card" expanded$="{{item.expanded}}">
+          <div
+            on-tap="toggleCard"
+            class="container card-main"
+            wide-layout$="{{wide}}">
+            <div class="card-thumbnail">
+              <iron-image
+                class="circle"
+                sizing="cover"
+                id="thumbnail-cover"
+                alt="Feed Thumbnail"
+                src="{{item.snippet.thumbnails.high.url}}"></iron-image>
+            </div>
+            <div class="flexchild">
+              <paper-fab
+                class="card-close"
+                mini
+                icon="close"
+                title="Close"></paper-fab>
+              <h1>{{item.snippet.title}}</h1>
+              <!-- <small><b>{{item.author}}</b></small>
+              | -->
+              <small>{{item.snippet.publishedAt}}</small>
+              <p class="card-snippet">{{item.snippet.description}} [more]</p>
+            </div>
+          </div>
+          <iron-collapse opened="{{item.expanded}}">
+            <div class="card-content">
+              <google-youtube
+                video-id="{{item.id.videoId}}"
+                height="450px"
+                width="100%">
+              </google-youtube>
+            </div>
+          </iron-collapse>
+          <div class="card-actions">
+            <paper-share-facebook link={{loadLink(item.id.videoId)}}></paper-share-facebook>
+            <paper-share-twitter
+              link={{loadLink(item.id.videoId)}}
+              user="vaadin"
+              text="{{item.snippet.description}}"></paper-share-twitter>
+            <paper-share-google link={{loadLink(item.id.videoId)}}></paper-share-google>
+            <a href="{{loadLink(item.id.videoId)}}" target="_blank" class="inherit">
+              <paper-button>
+                <iron-icon icon="vaadin-icons:external-link"></iron-icon>
+              </paper-button>
+            </a>
+          </div>
+        </div>
+      </template>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'display-videos',
+
+      properties: {
+        //applyAuthorStyles: true,
+        //resetStyleInheritance: true,
+        url: String,
+        entries: Number,
+        refresh: Number,
+        lastUpdated: {
+          type: String,
+          value: 'Loading...'
+        },
+        feed: Object,
+        authors: Array,
+        filterAuthor: String
+      },
+
+      ready: function() {
+        var that = this;
+
+        //TODO: re-invoke??
+        // var feeds = this.$.feed_data;
+        // if (this.refresh) {
+        //   setInterval(function(){
+        //       feeds.go();
+        //   }, this.refresh);
+        // }
+
+        var cb = this.$.cbFilter;
+
+        cb.addEventListener('value-changed', function() {
+          if(that.filterAuthor == cb.selectedItem) {
+            // blah!
+            // combo box item reset
+            that.filterAuthor = null;
+          }else {
+            that.filterAuthor = cb.selectedItem;
+          }
+          that.$.rssCards.render();
+        });
+      },
+
+      listeners: {
+        'api-load': 'responseHandler'
+      },
+
+      responseHandler: function(response) {
+        if (this.loaded) {
+            this.lastUpdated = new Date();
+            this.feed = response.detail[0].items;
+
+            //this.authors=this.feed.entries.map(function(a) {return a.author;});
+            //Generate unique list of authors
+            // var aAuths = Array();
+            // for(var entry of this.feed.entries) {
+            //   var cAuth = entry.author;
+            //   if(aAuths.indexOf(cAuth) < 0) {
+            //     aAuths.push(cAuth);
+            //   }
+            // }
+            // //Don't push directly to an observed property
+            // this.authors = aAuths;
+        }
+      },
+
+      loadLink: function(d) {
+        return "https://youtu.be/" + d;
+      },
+
+      toggleCard: function(e) {
+        var state = e.model;
+        state.set("item.expanded", !state.item.expanded);
+      },
+
+      authorFilter: function(item) {
+        return this.filterAuthor == null || this.filterAuthor == 'undefined' ?
+                true : item.author == this.filterAuthor;
+      }
+    });
+  </script>
+</dom-module>
