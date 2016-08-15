@@ -1,4 +1,8 @@
 <script>'https:'!==window.location.protocol&&(window.location.protocol='https')</script>
 <script>
-  window.location = "../?z";
+  var args = "";
+  if(window.location.search && window.location.search.startsWith('?')) {
+    args = window.location.search.substr(1);
+  }
+  window.location = "../?z&" + args;
 </script>
