@@ -1,17 +1,15 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <script>'https:'!==window.location.protocol&&(window.location.protocol='https')</script>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
   <title>Follow Vaadin</title>
 
-  <link rel="shortcut icon" sizes="32x32" href="images/app-icon.png">
+  <link rel="shortcut icon" sizes="32x32" href="/images/app-icon.png">
 
   <meta name="theme-color" content="#03a9f4">
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="/manifest.json">
 
   <script>
 
@@ -27,7 +25,7 @@
       } else {
         // polyfill web components
         var e = document.createElement('script');
-        e.src = 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
+        e.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
         document.head.appendChild(e);
       }
     })();
@@ -35,7 +33,7 @@
     // load pre-caching service worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('service-worker.js').then(function(reg) {
+        navigator.serviceWorker.register('/service-worker.js').then(function(reg) {
             console.log(':^)', reg);
             reg.pushManager.subscribe({
                 userVisibleOnly: true
@@ -50,7 +48,7 @@
 
   </script>
 
-  <link rel="import" href="src/fv-app.html">
+  <link rel="import" href="/src/fv-app.html">
 
   <style>
 
