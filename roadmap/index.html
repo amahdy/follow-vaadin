@@ -1,3 +1,7 @@
 <script>
-  window.location = "../?r";
+  var args = "";
+  if(window.location.search && window.location.search.startsWith('?')) {
+    args = window.location.search.substr(1);
+  }
+  window.location = "../?r&" + args;
 </script>
