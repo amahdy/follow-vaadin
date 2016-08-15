@@ -405,7 +405,11 @@
         if(state.item.expanded) {
           var vId=this.loadGLink(state.item);
           this.lastVideoId = vId;
-          state.set("item.inner", "<google-youtube id='"+vId+"' video-id='"+vId+"' fluid='true'></google-youtube>");
+          if(!isNaN(vId.substr(0,1))) {
+            this.lastVideoId = '_' + this.lastVideoId;
+          }
+
+          state.set("item.inner", "<google-youtube id='"+this.lastVideoId+"' video-id='"+vId+"' fluid='true'></google-youtube>");
         // TODO: is it needed? currently it's bogus anyway
         // }else {
           // state.set("item.inner", "<div>");
