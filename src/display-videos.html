@@ -9,6 +9,7 @@
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/neon-animation/neon-animations.html">
@@ -115,6 +116,12 @@
           };
       }
 
+      paper-progress.blue {
+        --paper-progress-active-color: var(--paper-light-blue-500);
+        --paper-progress-secondary-color: var(--paper-light-blue-100);
+        width: 100%;
+      }
+
       .card .container {
         cursor: pointer;
       }
@@ -181,6 +188,7 @@
       library-loaded="{{loaded}}"></iron-jsonp-library>
 
     <div class="container">
+      <paper-progress id="loader" indeterminate class="blue"></paper-progress>
       <!-- doesn't make sense because no refresh is happeneing -->
       <!-- <h1 class="feed_title">{{feed.title}}</h1> -->
       <small>Last updated: {{lastUpdated}}</small>
@@ -313,6 +321,8 @@
         var cb = this.$.cbFilter;
 
         cb.addEventListener('value-changed', function() {
+          that.$.loader.style.display = "block";
+
           if(that.filterAuthor == cb.selectedItem) {
             // blah!
             // combo box item reset
@@ -351,6 +361,8 @@
             if(response.detail[0]) {
               this.feed = response.detail[0].items;
             }
+
+            this.$.loader.style.display = "none";
         }
       },
 
@@ -372,6 +384,8 @@
           }
           //Don't push directly to an observed property
           this.authors = aAuths;
+
+          this.$.loader.style.display = "none";
         }
       },
 
