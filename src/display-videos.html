@@ -221,12 +221,8 @@
             </div>
           </div>
           <iron-collapse opened="{{item.expanded}}">
-            <div class="card-content">
-              <google-youtube
-                video-id="{{loadGLink(item)}}"
-                height="350px"
-                width="100%">
-              </google-youtube>
+            <div class="card-content" inner-h-t-m-l="{{item.inner}}">
+
             </div>
           </iron-collapse>
           <div class="card-actions">
@@ -269,6 +265,7 @@
         authors: Array,
         authorsId: Array,
         filterAuthor: String,
+        lastVideoId: String,
 
         animationConfig: {
             value: function () {
@@ -292,7 +289,6 @@
 
       _renderRepeat: function () {
           this.paperCard = Polymer.dom(this.root).querySelectorAll('.card');
-          window.xx = this.paperCard;
           this.animationConfig['entry'].push({
               name: 'cascaded-animation',
               animation: 'transform-animation',
@@ -386,6 +382,20 @@
       toggleCard: function(e) {
         var state = e.model;
         state.set("item.expanded", !state.item.expanded);
+
+        //TODO: some corner cases not covered
+        if(this.lastVideoId) {
+          this.$$('#' + this.lastVideoId).pause();
+        }
+
+        if(state.item.expanded) {
+          var vId=this.loadGLink(state.item);
+          this.lastVideoId = vId;
+          state.set("item.inner", "<google-youtube id='"+vId+"' video-id='"+vId+"' fluid='true'></google-youtube>");
+        // TODO: is it needed? currently it's bogus anyway
+        // }else {
+          // state.set("item.inner", "<div>");
+        }
       },
 
       loadGLink: function(item) {
