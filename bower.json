@@ -25,7 +25,8 @@
     "vaadin-icons": "^1.0.1",
     "vaadin-combo-box": "^1.1.1",
     "jquery": "^3.1.0",
-    "google-youtube": "^1.2.1"
+    "google-youtube": "^1.2.1",
+    "platinum-push-messaging": "PolymerElements/platinum-push-messaging#^1.0.5"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
