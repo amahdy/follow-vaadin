@@ -12,6 +12,8 @@
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation.html">
 <link rel="import" href="../bower_components/vaadin-icons/vaadin-icons.html">
 <link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="./paper-share-buttons/paper-share-facebook.html">
@@ -175,7 +177,8 @@
         id="rssCards"
         is="dom-repeat"
         items="{{feed.entries}}"
-        filter="authorFilter">
+        filter="authorFilter"
+        on-dom-change="_renderRepeat">
         <div class="card" expanded$="{{item.expanded}}">
           <div
             on-tap="toggleCard"
@@ -227,6 +230,10 @@
     Polymer({
       is: 'display-rss',
 
+      behaviors: [
+          Polymer.NeonAnimationRunnerBehavior
+      ],
+
       properties: {
         //applyAuthorStyles: true,
         //resetStyleInheritance: true,
@@ -239,7 +246,39 @@
         },
         feed: Object,
         authors: Array,
-        filterAuthor: String
+        filterAuthor: String,
+
+        animationConfig: {
+            value: function () {
+                return {
+                    'entry': [
+                        {
+                           name: 'fade-in-animation',
+                           node: this
+                        }
+                    ],
+                    'exit': [
+                        {
+                            name: 'fade-out-animation',
+                            node: this
+                        }
+                    ]
+                }
+            }
+        }
+      },
+
+      _renderRepeat: function () {
+          this.paperCard = Polymer.dom(this.root).querySelectorAll('.card');
+          window.xx = this.paperCard;
+          this.animationConfig['entry'].push({
+              name: 'cascaded-animation',
+              animation: 'transform-animation',
+              transformFrom: 'translateY(100vh)',
+              nodes: this.paperCard
+          });
+
+          this.playAnimation('entry');
       },
 
       ready: function() {
