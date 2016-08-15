@@ -206,7 +206,7 @@
             </div>
           </div>
           <iron-collapse opened="{{item.expanded}}">
-            <div class="card-content" inner-h-t-m-l="{{item.content}}">
+            <div class="card-content" inner-h-t-m-l="{{item.inner}}">
             </div>
           </iron-collapse>
           <div class="card-actions">
@@ -270,7 +270,6 @@
 
       _renderRepeat: function () {
           this.paperCard = Polymer.dom(this.root).querySelectorAll('.card');
-          window.xx = this.paperCard;
           this.animationConfig['entry'].push({
               name: 'cascaded-animation',
               animation: 'transform-animation',
@@ -346,6 +345,12 @@
       toggleCard: function(e) {
         var state = e.model;
         state.set("item.expanded", !state.item.expanded);
+        if(state.item.expanded) {
+          state.set("item.inner", state.item.content);
+        // TODO: is it needed? currently it's bogus anyway
+        // }else {
+        //   state.set("item.inner", "<div>");
+        }
       },
 
       authorFilter: function(item) {
