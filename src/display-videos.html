@@ -11,6 +11,8 @@
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation.html">
 <link rel="import" href="../bower_components/vaadin-icons/vaadin-icons.html">
 <link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box.html">
 <link rel="import" href="../bower_components/google-youtube/google-youtube.html">
@@ -172,6 +174,12 @@
       notify-event="api-load"
       library-loaded="{{loaded}}"></iron-jsonp-library>
 
+    <iron-jsonp-library
+      id="filter_data"
+      library-url=""
+      notify-event="api-load"
+      library-loaded="{{loaded}}"></iron-jsonp-library>
+
     <div class="container">
       <!-- doesn't make sense because no refresh is happeneing -->
       <!-- <h1 class="feed_title">{{feed.title}}</h1> -->
@@ -185,7 +193,7 @@
         id="rssCards"
         is="dom-repeat"
         items="{{feed}}"
-        filter="authorFilter">
+        on-dom-change="_renderRepeat">
         <div class="card" expanded$="{{item.expanded}}">
           <div
             on-tap="toggleCard"
@@ -215,20 +223,20 @@
           <iron-collapse opened="{{item.expanded}}">
             <div class="card-content">
               <google-youtube
-                video-id="{{item.id.videoId}}"
+                video-id="{{loadGLink(item)}}"
                 height="350px"
                 width="100%">
               </google-youtube>
             </div>
           </iron-collapse>
           <div class="card-actions">
-            <paper-share-facebook link={{loadLink(item.id.videoId)}}></paper-share-facebook>
+            <paper-share-facebook link={{loadLink(item)}}></paper-share-facebook>
             <paper-share-twitter
-              link={{loadLink(item.id.videoId)}}
+              link={{loadLink(item)}}
               user="vaadin"
               text="{{item.snippet.description}}"></paper-share-twitter>
-            <paper-share-google link={{loadLink(item.id.videoId)}}></paper-share-google>
-            <a href="{{loadLink(item.id.videoId)}}" target="_blank" class="inherit">
+            <paper-share-google link={{loadLink(item)}}></paper-share-google>
+            <a href="{{loadLink(item)}}" target="_blank" class="inherit">
               <paper-button>
                 <iron-icon icon="vaadin-icons:external-link"></iron-icon>
               </paper-button>
@@ -241,6 +249,10 @@
   <script>
     Polymer({
       is: 'display-videos',
+
+      behaviors: [
+          Polymer.NeonAnimationRunnerBehavior
+      ],
 
       properties: {
         //applyAuthorStyles: true,
@@ -255,7 +267,40 @@
         feed: Object,
         plist: Object,
         authors: Array,
-        filterAuthor: String
+        authorsId: Array,
+        filterAuthor: String,
+
+        animationConfig: {
+            value: function () {
+                return {
+                    'entry': [
+                        {
+                           name: 'fade-in-animation',
+                           node: this
+                        }
+                    ],
+                    'exit': [
+                        {
+                            name: 'fade-out-animation',
+                            node: this
+                        }
+                    ]
+                }
+            }
+        }
+      },
+
+      _renderRepeat: function () {
+          this.paperCard = Polymer.dom(this.root).querySelectorAll('.card');
+          window.xx = this.paperCard;
+          this.animationConfig['entry'].push({
+              name: 'cascaded-animation',
+              animation: 'transform-animation',
+              transformFrom: 'translateY(100vh)',
+              nodes: this.paperCard
+          });
+
+          this.playAnimation('entry');
       },
 
       ready: function() {
@@ -276,10 +321,24 @@
             // blah!
             // combo box item reset
             that.filterAuthor = null;
+
+            // look at this!
+            var url = that.$.feed_data.libraryUrl;
+            that.$.feed_data.libraryUrl = "";
+            that.$.feed_data.libraryUrl = url;
           }else {
             that.filterAuthor = cb.selectedItem;
+            for(var idx in that.authors) {
+              if(that.authors[idx] == cb.selectedItem) {
+                that.$.filter_data.libraryUrl
+                  = "https://www.googleapis.com/youtube/v3/playlistItems?playlistId="
+                  + that.authorsId[idx]
+                  + "&key=AIzaSyCgfLe7bb8oKK_Wc9uQH4P5SmS3c5vBktU&part=snippet,id&order=date&maxResults=50&callback=%%callback%%";
+                break;
+              }
+            }
           }
-          that.$.rssCards.render();
+          // that.$.rssCards.render();
         });
       },
 
@@ -307,10 +366,12 @@
           }
 
           var aAuths = Array();
+          this.authorsId = Array();
           for(var entry of this.plist) {
             var cAuth = entry.snippet.title;
             if(aAuths.indexOf(cAuth) < 0) {
               aAuths.push(cAuth);
+              this.authorsId.push(entry.id);
             }
           }
           //Don't push directly to an observed property
@@ -319,7 +380,7 @@
       },
 
       loadLink: function(d) {
-        return "https://youtu.be/" + d;
+        return "https://youtu.be/" + this.loadGLink(d);
       },
 
       toggleCard: function(e) {
@@ -327,9 +388,12 @@
         state.set("item.expanded", !state.item.expanded);
       },
 
-      authorFilter: function(item) {
-        return this.filterAuthor == null || this.filterAuthor == 'undefined' ?
-                true : item.author == this.filterAuthor;
+      loadGLink: function(item) {
+        if(item.snippet.resourceId) {
+          return item.snippet.resourceId.videoId;
+        }else {
+          return item.id.videoId;
+        }
       }
     });
   </script>

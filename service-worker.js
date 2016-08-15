@@ -100,3 +100,14 @@ self.addEventListener('fetch', event => {
   // event.respondWith(). If no fetch handlers call event.respondWith(), the request will be
   // handled by the browser as if there were no service worker involvement.
 });
+
+self.addEventListener('push', function(event) {
+  console.log('Push message received', event);
+  var title = 'Vaadin Updates';
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body: 'Vaadin has new updates...',
+      icon: 'images/app-icon-144.png',
+      tag: 'fv-app'
+    }));
+});

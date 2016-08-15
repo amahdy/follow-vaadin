@@ -10,6 +10,7 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/platinum-push-messaging/platinum-push-messaging.html">
 <link rel="import" href="../bower_components/vaadin-icons/vaadin-icons.html">
 <link rel="import" href="fv-icons.html">
 
@@ -88,7 +89,12 @@
         font-weight: bold;
       }
     </style>
-
+    <platinum-push-messaging
+      title="Application updated"
+      message="The application was updated in the background"
+      icon-url="icon.png"
+      click-url="notification.html">
+    </platinum-push-messaging>
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
