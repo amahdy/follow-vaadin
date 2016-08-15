@@ -175,7 +175,25 @@
       ],
 
       _routePageChanged: function(page) {
-        this.page = page || 'articles';
+        // Workaround for uncontrolled 404
+        if(window.location.search.startsWith("?a")) {
+          this.page = 'articles';
+          window.history.pushState({state:"articles"}, "articles", "articles");
+        }else if(window.location.search.startsWith("?v")) {
+          this.page = 'videos';
+          window.history.pushState({state:"videos"}, "videos", "videos");
+        }else if(window.location.search.startsWith("?t")) {
+          this.page = 'tweets';
+          window.history.pushState({state:"tweets"}, "tweets", "tweets");
+        }else if(window.location.search.startsWith("?r")) {
+          this.page = 'roadmap';
+          window.history.pushState({state:"roadmap"}, "roadmap", "roadmap");
+        }else if(window.location.search.startsWith("?z")) {
+          this.page = 'releases';
+          window.history.pushState({state:"releases"}, "releases", "releases");
+        }else {
+          this.page = page || 'articles';
+        }
       },
 
       _pageChanged: function(page) {
